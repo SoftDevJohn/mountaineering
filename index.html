@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Navigation</title>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <link href="styles/style.css" rel="stylesheet" type="text/css">
+
+	</head>
+  <body>
+    <h1>Mountaineering</h1>
+	<p>
+	Use the following to convert from Latitude/Longitue to Irish or UK grid.
+	</p>
+	<form>
+		<fieldset>
+		<legend>Latitude/Longitude</legend>
+		<p>
+			<label>Lattitude</legend>
+			<input type="text" id="latitude" value "53.5"/>
+			<label>Longitude</legend>
+			<input type="text" id="longitude" value "-8"/>
+			
+		</p>
+		</fieldset>
+		<fieldset>
+		<legend>Grid System</legend>
+		<p>
+			<label>Irish Grid System</label>   
+			<input type="radio" name = "gridSystem" id="gridIE" value="ie" checked="checked"/>
+			<label>UK Grid System</label>   
+			<input type="radio" name = "gridSystem" id="gridUK" value="uk"/>
+		</p>
+		</fieldset>
+	</form>
+  <button id="convert" onClick="calculateGridRefHandler()">Calculate Grid Reference</button>
+  <p>
+	<label>Irish Grid System</label> 
+	<input type="text" id="gridResult" readonly value=""/>
+  
+  </p>
+
+  <script src="scripts/main.js"></script>
+  
+  </body>
+</html>
