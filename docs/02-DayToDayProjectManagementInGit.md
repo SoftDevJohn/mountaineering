@@ -16,7 +16,19 @@ Add the list of files to be ignored as
 
 Doing "git status" will no longer show this file as untracked.
 
+Commit everything now including the .gitignore.
 
 
 
+#### Git Visual Tools
+
+File Manager will show icons beside files.
+
+For example, the file:
+
+C:\dev\mountaineering\docs\02-DayToDayProjectManagementInGit.md
+
+will show a red icon with an exclamation mark when the file has been modied.
+
+Right-Click on the file and Git Commit -> "master" ... and in the window that opens, enter a message.
 
