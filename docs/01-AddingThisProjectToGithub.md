@@ -81,3 +81,7 @@ git commit -m "Committing two new files"
 
 
 
+##### Pushing to the server
+
+At this point these new files are stored in the GIT repository on my local PC.
+
