@@ -40,21 +40,13 @@ Push my local repository to the origin repository.
 
 
 
+## Creating a release tag
 
+git tag -a v0.1 -m "Very minimalist HTML and JavaScript Example"
 
+This creates a tag in the local repository that by default wont be pushed by default to the remote repository, but the following command will push it.
 
-
-
-
-
-
-
-
-
-
-
-
-
+`git push origin --tags`
 
 
 

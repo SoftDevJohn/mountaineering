@@ -12,17 +12,28 @@ Have a client vesion of GIT on local machine and a Interner Browser to run the e
 
 ### Installing
 
-Clone repository to local directory on a PC by issuing the following command:
+Clone repository to local directory on PC, typing the following in a command shell:
 
-cd c:\dev
+`cd c:\dev`
+`git clone https://github.com/SoftDevJohn/mountaineering.git`
 
-git clone https://github.com/SoftDevJohn/mountaineering.git
+This creates a subdirectory 'mountaineering' containing the project.
 
-cd mountaineering
+Change into the new directory to issue git commands:
+
+`cd mountaineering`
 
 
 
-Running the tests
+If you want to retrieve the initial release which is a very minimalist example of using Html and JavaScript, then use the following command
 
-Open the C:\dev\mountaineering\index.html file in any browser.
+`git checkout v0.1`
+
+
+
+### Running the tests
+
+Using an Web Browse, open the following location:
+
+`C:\dev\mountaineering\index.html`
 
