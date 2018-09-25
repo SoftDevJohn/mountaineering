@@ -59,5 +59,16 @@ git push origin develop
 
 ##### Merging the develop branch with the master branch for a production release
 
+A branch,'release-0.2', is created off the 'develop' branch to prepare for merging with the master. Last minute changes and bug fixes are made on this branch, but definitely no new features. Continued developmement continues on the 'develop' branch. Then this release branch is then merged back on to the 'master' branch.
 
+
+
+git checkout -b release-0.2 develop
+Bump up the version number immediately in my version.txt before doing anything else.
+git commit -a -m "Bumped version number to 0.2"
+Make whatever last minute changes are necessary to get this into production.
+
+Commit the changes.
+
+git commit -a -m "Make a few production release changes"
 
