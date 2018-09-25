@@ -57,7 +57,7 @@ git push origin develop
 
 
 
-#### Merging the develop branch with the master branch for a production release
+##### Merging the develop branch with the master branch for a production release
 
 
 
