@@ -12,9 +12,17 @@ Have a client vesion of GIT on local machine and a Interner Browser to run the e
 
 ### Installing
 
-Clone repository to local directory on PC.
+Clone repository to local directory on a PC by issuing the following command:
+
+cd c:\dev
+
+git clone https://github.com/SoftDevJohn/mountaineering.git
+
+cd mountaineering
+
+
 
 Running the tests
 
-Open the index.html file in any browser.
+Open the C:\dev\mountaineering\index.html file in any browser.
 
