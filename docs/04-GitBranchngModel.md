@@ -86,3 +86,26 @@ git push origin --tags
 #### Quick Production Bug fixes
 
 In this case we create a 'hotfix' branch off the 'master' and then merge it back on the 'master' and also on to the 'develop' branch.
+
+git checkout -b hotfix-0.1.1 master
+We use the naming convention hotfix-*, which takes the existing version and append new minor number as bug fix.
+
+The first thing to do is bump up the version number and commit it. In this example, I use a simple version.txt file.
+
+git commit -a -m "Bumped version number to 0.2.1"
+
+Now make the urgent bug fixes and commit the changes.
+
+git commit -m "Fixed severe production bug"
+
+git checkout master
+git merge --no-ff hotfix-0.2.1
+git tag -a 0.2.1
+
+
+
+Also add the bug fix to the develop branch.
+
+git checkout develop
+git merge --no-ff hotfix-0.2.1
+git branch -d hotfix-0.2.1
