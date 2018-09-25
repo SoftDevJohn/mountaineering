@@ -57,7 +57,7 @@ git push origin develop
 
 
 
-##### Merging the develop branch with the master branch for a production release
+#### Merging the develop branch with the master branch for a production release
 
 A branch,'release-0.2', is created off the 'develop' branch to prepare for merging with the master. Last minute changes and bug fixes are made on this branch, but definitely no new features. Continued developmement continues on the 'develop' branch. Then this release branch is then merged back on to the 'master' branch.
 
@@ -72,3 +72,17 @@ Commit the changes.
 
 git commit -a -m "Make a few production release changes"
 
+Now merge it on to the master, this is effectively a production release.
+
+git checkout master
+git merge --no-ff release-0.2
+Now tag the release
+git tag -a 0.2
+
+git branch -d release-0.2
+
+git push origin --tags
+
+#### Quick Production Bug fixes
+
+In this case we create a 'hotfix' branch off the 'master' and then merge it back on the 'master' and also on to the 'develop' branch.
