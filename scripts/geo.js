@@ -38,12 +38,14 @@ function getGridFromLatLong(ukGrid,lat,lon){
 function LatLongToOSGrid(p) {
   var lat = p.lat * Math.PI / 180; // convert degrees to radians
   var lon = p.lon * Math.PI / 180; // convert degrees to radians
-  
-  var a = 6377563.396, b = 6356256.910;          // Airy 1830 major & minor semi-axes
-  var F0 = 0.9996012717;                         // NatGrid scale factor on central meridian
-  var lat0 = (49) * Math.PI / 180
-  var lon0 = (-2) * Math.PI / 180;  // NatGrid true origin
-  var N0 = -100000, E0 = 400000;                 // northing & easting of true origin, metres
+
+  var a = 6377340.189, b = 6356034.447;          // Airy 1965 Datum major & minor semi-axes
+  var F0 = 1.000035;                         // NatGrid scale factor on central meridian
+  var lat0 = (53.5) * Math.PI / 180
+  var lon0 = (-8) * Math.PI / 180;  // I NG true origin
+  var N0 = 250000, E0 = 200000;                 // northing & easting of true origin, metres
+
+
   var e2 = 1 - (b*b)/(a*a);                      // eccentricity squared
   var n = (a-b)/(a+b), n2 = n*n, n3 = n*n*n;
 
@@ -102,40 +104,38 @@ function LatLon(lat, lon, height) {
   this.lon = lon;
   this.height = height;
 }
- 
- 
- 
 
-// ellipse parameters
 var e = { WGS84:    { a: 6378137,     b: 6356752.3142, f: 1/298.257223563 },
-          Airy1830: { a: 6377563.396, b: 6356256.910,  f: 1/299.3249646   } };
- 
+          Airy1965: { a: 6377340.189, b: 6356034.447,  f: 1/299.3249646   } };
+		  //what should f be
+
+  var a = 6377340.189, b = 6356034.447;          // Airy 1965 Datum major & minor semi-axes
+  var F0 = 1.000035;                         // NatGrid scale factor on central meridian
+  var lat0 = (53.5) * Math.PI / 180
+  var lon0 = (-8) * Math.PI / 180;  // NatGrid true origin
+  var N0 = 250000, E0 = 200000;                 // northing & easting of true origin, metres
+
+		  
 // helmert transform parameters
-var h = { WGS84toOSGB36: { tx: -446.448,  ty:  125.157,   tz: -542.060,   // m
-                           rx:   -0.1502, ry:   -0.2470,  rz:   -0.8421,  // sec
-                           s:    20.4894 },                               // ppm
-          OSGB36toWGS84: { tx:  446.448,  ty: -125.157,   tz:  542.060,
+var h = { WGS84toOSGB36: { 
+							tx: -482.53,  ty:  130.596,   tz: -564.557,   // m
+							rx:   1.042, ry:   0.214,  rz:   0.631,  // sec
+							s:    -8.15 
+						  },                               // ppm
+          xxOSGB36toWGS84: { tx:  446.448,  ty: -125.157,   tz:  542.060,
                            rx:    0.1502, ry:    0.2470,  rz:    0.8421,
                            s:   -20.4894 } };
  
- 
- 
 function convertWGS84toOSGB36(p1) {
-  var p2 = convert(p1, e.WGS84, h.WGS84toOSGB36, e.Airy1830);
+  var p2 = convert(p1, e.WGS84, h.WGS84toOSGB36, e.Airy1965);
   return p2;
 }
 
 function convert(p, e1, t, e2) {
   // -- convert polar to cartesian coordinates (using ellipse 1)
-  
   p1 = new LatLon(p.lat, p.lon, p.height);  // to avoid modifying passed param
-
-  
-  
   p1.lat = p.lat * Math.PI / 180; // convert degrees to radians
   p1.lon = p.lon * Math.PI / 180; // convert degrees to radians
- 
- 
   var a = e1.a, b = e1.b;
  
   var sinPhi = Math.sin(p1.lat), cosPhi = Math.cos(p1.lat);
@@ -148,7 +148,6 @@ function convert(p, e1, t, e2) {
   var x1 = (nu+H) * cosPhi * cosLambda;
   var y1 = (nu+H) * cosPhi * sinLambda;
   var z1 = ((1-eSq)*nu + H) * sinPhi;
- 
  
   // -- apply helmert transform using appropriate params
   

@@ -15,8 +15,15 @@ function calculateGridRefHandler() {
 	
 	var lat = document.getElementById('latitude').value;
 	var lon = document.getElementById('longitude').value;
-	//lat =	53.06851;
-	//lon = -4.07615;
+	//Snodonia
+	lat =	53.06851;
+	lon = -4.07615;
+	
+	//Lugnaquilla
+	//lat = 52.96709;
+	//lon = -6.46461;
+	//Expect 303210 191771 (T 03210 91771)
+
   
 
 	
