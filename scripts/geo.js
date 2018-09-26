@@ -1,22 +1,5 @@
 /*
-Lattitude/Longitude to UK Grid Reference
-
-UK:
-UK Grid
-Lat/Lon (WGS84) 52.65,1.70 => TG 50370 12234, 650370.322,312234.323
-
-
-Snowdonia:  53.06851,-4.07615 => 260991,354379 (SH 60991 54379) = 
-			ViewRanger: SH6099 5438 (meters)
-						SH6099 5437
-The calculation is out by 1 metre(gps will only be accurate to 3 metres)
-
-IRELAND: 
-Irish Grid
-	Lugnaquilla
-	Viewrange:	52.96709,-6.46461 => 303210 191771 (T 03210 91771)
-	
-
+Lattitude/Longitude to Irish Grid Reference
 */
 
 /*
@@ -36,14 +19,14 @@ function getGridFromLatLong(ukGrid,lat,lon){
  * convert geodesic co-ordinates to OS grid reference
  */
 function LatLongToOSGrid(p) {
-  var lat = p.lat * Math.PI / 180; // convert degrees to radians
-  var lon = p.lon * Math.PI / 180; // convert degrees to radians
+  var lat = p.lat * Math.PI / 180; 			// convert degrees to radians
+  var lon = p.lon * Math.PI / 180; 			// convert degrees to radians
 
-  var a = 6377340.189, b = 6356034.447;          // Airy 1965 Datum major & minor semi-axes
-  var F0 = 1.000035;                         // NatGrid scale factor on central meridian
+  var a = 6377340.189, b = 6356034.447;     // Airy 1965 Datum major & minor semi-axes
+  var F0 = 1.000035;                        // NatGrid scale factor on central meridian
   var lat0 = (53.5) * Math.PI / 180
-  var lon0 = (-8) * Math.PI / 180;  // I NG true origin
-  var N0 = 250000, E0 = 200000;                 // northing & easting of true origin, metres
+  var lon0 = (-8) * Math.PI / 180;  		// Irishh NG true origin
+  var N0 = 250000, E0 = 200000;             // northing & easting of true origin, metres
 
 
   var e2 = 1 - (b*b)/(a*a);                      // eccentricity squared
@@ -109,11 +92,11 @@ var e = { WGS84:    { a: 6378137,     b: 6356752.3142, f: 1/298.257223563 },
           Airy1965: { a: 6377340.189, b: 6356034.447,  f: 1/299.3249646   } };
 		  //what should f be
 
-  var a = 6377340.189, b = 6356034.447;          // Airy 1965 Datum major & minor semi-axes
+  var a = 6377340.189, b = 6356034.447;      // Airy 1965 Datum major & minor semi-axes
   var F0 = 1.000035;                         // NatGrid scale factor on central meridian
   var lat0 = (53.5) * Math.PI / 180
-  var lon0 = (-8) * Math.PI / 180;  // NatGrid true origin
-  var N0 = 250000, E0 = 200000;                 // northing & easting of true origin, metres
+  var lon0 = (-8) * Math.PI / 180;  		 // NatGrid true origin
+  var N0 = 250000, E0 = 200000;              // northing & easting of true origin, metres
 
 		  
 // helmert transform parameters
