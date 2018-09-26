@@ -79,7 +79,7 @@ function LatLongToOSGrid(p) {
   var N = I + II*dLon2 + III*dLon4 + IIIA*dLon6;
   var E = E0 + IV*dLon + V*dLon3 + VI*dLon5;
 
-  var digits = 8;
+  var digits = 10;
   E = Math.floor((E%10000000)/Math.pow(10,5-digits/2));
   N = Math.floor((N%10000000)/Math.pow(10,5-digits/2));
   var gridRef = E.padLZ(digits/2) + N.padLZ(digits/2);
