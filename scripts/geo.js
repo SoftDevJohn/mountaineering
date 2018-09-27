@@ -1,103 +1,14 @@
-/*
-Lattitude/Longitude to Irish Grid Reference
-*/
-
-/*
-Calculate Grid reference button handler
-*/
-function getGridFromLatLong(ukGrid,lat,lon){
-  /*
-  var pWGS = new LatLon(lat, lon);
-  pOSGB = convertWGS84toOSGB36(pWGS);
-  return LatLongToOSGrid(pOSGB);
-  */
-  /*
-  var pWGS = new LatLon(lat, lon);
-  pOSGB = convertWGS84toOSGB36(pWGS);
-	var p2 = convert(p1, e.WGS84, h.WGS84toOSGB36, e.Airy1965);
-
-  return LatLongToOSGrid(pOSGB);
-  
-  
-  
-  */
-
-  
-  
-/*
-  var lat = p.lat * Math.PI / 180; 			// convert degrees to radians
-  var lon = p.lon * Math.PI / 180; 			// convert degrees to radians
-
-*/  
-  
-  var pWGS = new LatLon(lat, lon);
-  var p2 = convert(lat, lon, e.WGS84, h.WGS84toOSGB36, e.Airy1965);
-
-  return LatLongToOSGrid(p2);
- 
-  
- }
-
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 /*  Convert latitude/longitude <=> OS National Grid Reference points (c) John Costigan 2018       */
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 
 /*
- * convert geodesic co-ordinates to OS grid reference
- */
-function LatLongToOSGrid(p) {
-  var latRad = p.lat * Math.PI / 180; 			// convert degrees to radians
-  var lonRad = p.lon * Math.PI / 180; 			// convert degrees to radians
-
-  var a = 6377340.189, b = 6356034.447;     // Airy 1965 Datum major & minor semi-axes
-  var F0 = 1.000035;                        // NatGrid scale factor on central meridian
-  var lat0 = (53.5) * Math.PI / 180
-  var lon0 = (-8) * Math.PI / 180;  		// Irishh NG true origin
-  var N0 = 250000, E0 = 200000;             // northing & easting of true origin, metres
-
-
-  var e2 = 1 - (b*b)/(a*a);                      // eccentricity squared
-  var n = (a-b)/(a+b), n2 = n*n, n3 = n*n*n;
-
-  var cosLat = Math.cos(latRad), sinLat = Math.sin(latRad);
-  var nu = a*F0/Math.sqrt(1-e2*sinLat*sinLat);              // transverse radius of curvature
-  var rho = a*F0*(1-e2)/Math.pow(1-e2*sinLat*sinLat, 1.5);  // meridional radius of curvature
-  var eta2 = nu/rho-1;
-
-  var Ma = (1 + n + (5/4)*n2 + (5/4)*n3) * (latRad-lat0);
-  var Mb = (3*n + 3*n*n + (21/8)*n3) * Math.sin(latRad-lat0) * Math.cos(latRad+lat0);
-  var Mc = ((15/8)*n2 + (15/8)*n3) * Math.sin(2*(latRad-lat0)) * Math.cos(2*(latRad+lat0));
-  var Md = (35/24)*n3 * Math.sin(3*(latRad-lat0)) * Math.cos(3*(latRad+lat0));
-  var M = b * F0 * (Ma - Mb + Mc - Md);              // meridional arc
-
-  var cos3lat = cosLat*cosLat*cosLat;
-  var cos5lat = cos3lat*cosLat*cosLat;
-  var tan2lat = Math.tan(latRad)*Math.tan(latRad);
-  var tan4lat = tan2lat*tan2lat;
-
-  var I = M + N0;
-  var II = (nu/2)*sinLat*cosLat;
-  var III = (nu/24)*sinLat*cos3lat*(5-tan2lat+9*eta2);
-  var IIIA = (nu/720)*sinLat*cos5lat*(61-58*tan2lat+tan4lat);
-  var IV = nu*cosLat;
-  var V = (nu/6)*cos3lat*(nu/rho-tan2lat);
-  var VI = (nu/120) * cos5lat * (5 - 18*tan2lat + tan4lat + 14*eta2 - 58*tan2lat*eta2);
-
-  var dLon = lonRad-lon0;
-  var dLon2 = dLon*dLon, dLon3 = dLon2*dLon, dLon4 = dLon3*dLon, dLon5 = dLon4*dLon, dLon6 = dLon5*dLon;
-
-  var N = I + II*dLon2 + III*dLon4 + IIIA*dLon6;
-  var E = E0 + IV*dLon + V*dLon3 + VI*dLon5;
-
-  var digits = 10;
-  E = Math.floor((E%10000000)/Math.pow(10,5-digits/2));
-  N = Math.floor((N%10000000)/Math.pow(10,5-digits/2));
-  var gridRef = E.padLZ(digits/2) + N.padLZ(digits/2);
-  return gridRef;
-  
-}
-
-/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
+Calculate Grid reference button handler
+*/
+function getGridFromLatLong(ukGrid,lat,lon){
+  var pWGS = new LatLon(lat, lon);
+  return convert(lat, lon, e.WGS84, h.WGS84toOSGB36, e.Airy1965);
+ }
 
 /*
  * pad a number with sufficient leading zeros to make it w chars wide
@@ -134,7 +45,11 @@ var h = { WGS84toOSGB36: {
                            rx:    0.1502, ry:    0.2470,  rz:    0.8421,
                            s:   -20.4894 } };
  
-function convert(lat,lon, e1, t, e2) {
+
+/*
+ * convert geodesic co-ordinates to OS grid reference
+ */
+ function convert(lat,lon, e1, t, e2) {
   // -- convert polar to cartesian coordinates (using ellipse 1)
   //p1 = new LatLon(p.lat, p.lon);  // to avoid modifying passed param
   var latRad = lat * Math.PI / 180; // convert degrees to radians
@@ -182,11 +97,67 @@ function convert(lat,lon, e1, t, e2) {
   var lambda = Math.atan2(y2, x2);
   H = p/Math.cos(phi) - nu;
  
-  return new LatLon(phi * 180 / Math.PI, lambda * 180 / Math.PI);
-}
+  //return new LatLon(phi * 180 / Math.PI, lambda * 180 / Math.PI);
+	lat = phi * 180 / Math.PI;
+	lon = lambda * 180 / Math.PI;
+
+  ///////////////// mergin latLonToOsGrid
+    var latRad = lat * Math.PI / 180; 			// convert degrees to radians
+  var lonRad = lon * Math.PI / 180; 			// convert degrees to radians
+
+  var a = 6377340.189, b = 6356034.447;     // Airy 1965 Datum major & minor semi-axes
+  var F0 = 1.000035;                        // NatGrid scale factor on central meridian
+  var lat0 = (53.5) * Math.PI / 180
+  var lon0 = (-8) * Math.PI / 180;  		// Irishh NG true origin
+  var N0 = 250000, E0 = 200000;             // northing & easting of true origin, metres
+
+
+  var e2 = 1 - (b*b)/(a*a);                      // eccentricity squared
+  var n = (a-b)/(a+b), n2 = n*n, n3 = n*n*n;
+
+  var cosLat = Math.cos(latRad), sinLat = Math.sin(latRad);
+  var nu = a*F0/Math.sqrt(1-e2*sinLat*sinLat);              // transverse radius of curvature
+  var rho = a*F0*(1-e2)/Math.pow(1-e2*sinLat*sinLat, 1.5);  // meridional radius of curvature
+  var eta2 = nu/rho-1;
+
+  var Ma = (1 + n + (5/4)*n2 + (5/4)*n3) * (latRad-lat0);
+  var Mb = (3*n + 3*n*n + (21/8)*n3) * Math.sin(latRad-lat0) * Math.cos(latRad+lat0);
+  var Mc = ((15/8)*n2 + (15/8)*n3) * Math.sin(2*(latRad-lat0)) * Math.cos(2*(latRad+lat0));
+  var Md = (35/24)*n3 * Math.sin(3*(latRad-lat0)) * Math.cos(3*(latRad+lat0));
+  var M = b * F0 * (Ma - Mb + Mc - Md);              // meridional arc
+
+  var cos3lat = cosLat*cosLat*cosLat;
+  var cos5lat = cos3lat*cosLat*cosLat;
+  var tan2lat = Math.tan(latRad)*Math.tan(latRad);
+  var tan4lat = tan2lat*tan2lat;
+
+  var I = M + N0;
+  var II = (nu/2)*sinLat*cosLat;
+  var III = (nu/24)*sinLat*cos3lat*(5-tan2lat+9*eta2);
+  var IIIA = (nu/720)*sinLat*cos5lat*(61-58*tan2lat+tan4lat);
+  var IV = nu*cosLat;
+  var V = (nu/6)*cos3lat*(nu/rho-tan2lat);
+  var VI = (nu/120) * cos5lat * (5 - 18*tan2lat + tan4lat + 14*eta2 - 58*tan2lat*eta2);
+
+  var dLon = lonRad-lon0;
+  var dLon2 = dLon*dLon, dLon3 = dLon2*dLon, dLon4 = dLon3*dLon, dLon5 = dLon4*dLon, dLon6 = dLon5*dLon;
+
+  var N = I + II*dLon2 + III*dLon4 + IIIA*dLon6;
+  var E = E0 + IV*dLon + V*dLon3 + VI*dLon5;
+
+  var digits = 10;
+  E = Math.floor((E%10000000)/Math.pow(10,5-digits/2));
+  N = Math.floor((N%10000000)/Math.pow(10,5-digits/2));
+  var gridRef = E.padLZ(digits/2) + N.padLZ(digits/2);
+  return gridRef;
+
+  
+  }
 
 ///Add major changes
 //here
 //After changing Latong
 //REnamed ron to ron rad
-//Mile stone
+//Mile stone/latlon bject almost gone
+//after merging
+
