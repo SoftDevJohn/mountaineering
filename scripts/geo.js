@@ -6,23 +6,9 @@
 Calculate Grid reference button handler
 */
 function getGridFromLatLong(ukGrid,lat,lon){
-  var pWGS = new LatLon(lat, lon);
   return convert(lat, lon, e.WGS84, h.WGS84toOSGB36, e.Airy1965);
  }
 
-/*
- * pad a number with sufficient leading zeros to make it w chars wide
- */
-Number.prototype.padLZ = function(w) {
-  var n = this.toString();
-  for (var i=0; i<w-n.length; i++) n = '0' + n;
-  return n;
-}
-
-function LatLon(lat, lon) {
-  this.lat = lat;
-  this.lon = lon;
-}
 
 var e = { WGS84:    { a: 6378137,     b: 6356752.3142, f: 1/298.257223563 },
           Airy1965: { a: 6377340.189, b: 6356034.447,  f: 1/299.3249646   } };
@@ -148,16 +134,18 @@ var h = { WGS84toOSGB36: {
   var digits = 10;
   E = Math.floor((E%10000000)/Math.pow(10,5-digits/2));
   N = Math.floor((N%10000000)/Math.pow(10,5-digits/2));
-  var gridRef = E.padLZ(digits/2) + N.padLZ(digits/2);
-  return gridRef;
 
-  
+
+  //Sdd leading zeros
+  var es = E.toString();
+  for (var i=0; i<(digits/2)-es.length; i++) es = '0' + es;
+
+  var ns = N.toString();
+  for (var i=0; i<(digits/2)-ns.length; i++) ns = '0' + ns;
+
+  var gridRef = es + ns;
+
+  return gridRef;
   }
 
-///Add major changes
-//here
-//After changing Latong
-//REnamed ron to ron rad
-//Mile stone/latlon bject almost gone
-//after merging
 
