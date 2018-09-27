@@ -39,7 +39,7 @@ Using an Web Browse, open the following location:
 
 
 
-Test 1
+#### Test 1 (Getting grid reference of Lugnaquilla)
 
 Enter the coordinates for Lugnaquilla as follows: 
 
@@ -53,7 +53,7 @@ The expected `Irish Grid Reference`  is: `303207191773`*(according to ViewRanger
 
 
 
-Test 2
+#### Test 2 (Getting grid reference of Croaghgorm)
 
 Enter the coordinates for Croaghgorm as follows: 
 
