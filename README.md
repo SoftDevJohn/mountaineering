@@ -37,3 +37,31 @@ Using an Web Browse, open the following location:
 
 `C:\dev\mountaineering\index.html`
 
+
+
+#### Test 1 (Getting grid reference of Lugnaquilla)
+
+Enter the coordinates for Lugnaquilla as follows: 
+
+`Latitude: 52.96712` 
+
+`Longitude:  -6.46464`
+
+Press the "`Calculate Grid Reference`" button
+
+The expected `Irish Grid Reference`  is: `303207191773`*(according to ViewRanger)*
+
+
+
+#### Test 2 (Getting grid reference of Croaghgorm)
+
+Enter the coordinates for Croaghgorm as follows: 
+
+`Latitude: 54.75419` 
+
+`Longitude:  -8.08101`
+
+Press the "`Calculate Grid Reference`" button
+
+The expected `Irish Grid Reference`  is:  `303207191773` (according to ViewRanger)
+
