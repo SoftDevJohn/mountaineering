@@ -120,9 +120,18 @@ Tag the release with the new version number
 
 Also add the bug fix to the develop branch.
 
-git checkout develop
-git merge --no-ff hotfix-0.2.1
-git branch -d hotfix-0.2.1
+`git checkout develop`
+`git merge --no-ff hotfix-0.2.1`
+
+Now delete the branch
+
+`git branch -d hotfix-0.2.1`
+
+Push our repository, together with its tags, to the origin repository,
+
+`git push origin --tags`
 
 
+
+#### 
 
