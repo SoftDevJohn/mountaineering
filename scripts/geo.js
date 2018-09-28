@@ -6,42 +6,32 @@
 Calculate Grid reference button handler
 */
 function getGridFromLatLong(ukGrid,lat,lon){
-  return convert(lat, lon, e.WGS84, h.WGS84toOSGB36, e.Airy1965);
+  return convert(lat, lon);
  }
-
-
-var e = { WGS84:    { a: 6378137,     b: 6356752.3142, f: 1/298.257223563 },
-          Airy1965: { a: 6377340.189, b: 6356034.447,  f: 1/299.3249646   } };
-		  //what should f be
-
-  var a = 6377340.189, b = 6356034.447;      // Airy 1965 Datum major & minor semi-axes
-  var F0 = 1.000035;                         // NatGrid scale factor on central meridian
-  var lat0 = (53.5) * Math.PI / 180
-  var lon0 = (-8) * Math.PI / 180;  		 // NatGrid true origin
-  var N0 = 250000, E0 = 200000;              // northing & easting of true origin, metres
-
-		  
-// helmert transform parameters
-var h = { WGS84toOSGB36: { 
-							tx: -482.53,  ty:  130.596,   tz: -564.557,   // m
-							rx:   1.042, ry:   0.214,  rz:   0.631,  // sec
-							s:    -8.15 
-						  },                               // ppm
-          xxOSGB36toWGS84: { tx:  446.448,  ty: -125.157,   tz:  542.060,
-                           rx:    0.1502, ry:    0.2470,  rz:    0.8421,
-                           s:   -20.4894 } };
- 
 
 /*
  * convert geodesic co-ordinates to OS grid reference
  */
- function convert(lat,lon, e1, t, e2) {
+ function convert(lat,lon) {
   // -- convert polar to cartesian coordinates (using ellipse 1)
-  //p1 = new LatLon(p.lat, p.lon);  // to avoid modifying passed param
-  var latRad = lat * Math.PI / 180; // convert degrees to radians
-  var lonRad = lon * Math.PI / 180; // convert degrees to radians
-  var a = e1.a, b = e1.b;
- 
+	
+  var deg2rad = Math.PI / 180;
+  var latRad = lat * deg2rad; // convert degrees to radians
+  var lonRad = lon * deg2rad; // convert degrees to radians
+  var a = 6378137; //WGS84.a
+  var b = 6356752.3142;	//WGS84.b
+  var tx = -482.53;
+  var ty = 130.596;
+  var tz = -564.557;
+  var rx = 1.042/3600 * deg2rad;  // normalise seconds to radians
+  var ry = 0.214/3600 * deg2rad;
+  var rz = 0.631/3600 * deg2rad;
+  var s1 = -8.15/1e6 + 1;              // normalise ppm to (s+1)
+  var F0 = 1.000035;                        // NatGrid scale factor on central meridian
+  var lat0 = (53.5) * deg2rad
+  var lon0 = (-8) * deg2rad;  		// Irishh NG true origin
+  var N0 = 250000, E0 = 200000;             // northing & easting of true origin, metres
+  
   var sinPhi = Math.sin(latRad), cosPhi = Math.cos(latRad);
   var sinLambda = Math.sin(lonRad), cosLambda = Math.cos(lonRad);
   var H = 0;
@@ -53,23 +43,14 @@ var h = { WGS84toOSGB36: {
   var y1 = (nu+H) * cosPhi * sinLambda;
   var z1 = ((1-eSq)*nu + H) * sinPhi;
  
-  // -- apply helmert transform using appropriate params
-  
-  var tx = t.tx, ty = t.ty, tz = t.tz;
-  var rx = t.rx/3600 * Math.PI/180;  // normalise seconds to radians
-  var ry = t.ry/3600 * Math.PI/180;
-  var rz = t.rz/3600 * Math.PI/180;
-  var s1 = t.s/1e6 + 1;              // normalise ppm to (s+1)
- 
   // apply transform
   var x2 = tx + x1*s1 - y1*rz + z1*ry;
   var y2 = ty + x1*rz + y1*s1 - z1*rx;
   var z2 = tz - x1*ry + y1*rx + z1*s1;
- 
- 
-  // -- convert cartesian to polar coordinates (using ellipse 2)
- 
-  a = e2.a, b = e2.b;
+  
+  // -- convert cartesian to polar coordinates (using ellipse 2) 
+  a = 6377340.189; // Airy1965.a
+  b = 6356034.447; //Airy1965.b
   var precision = 4 / a;  // results accurate to around 4 metres
  
   eSq = (a*a - b*b) / (a*a);
@@ -88,15 +69,8 @@ var h = { WGS84toOSGB36: {
 	lon = lambda * 180 / Math.PI;
 
   ///////////////// mergin latLonToOsGrid
-    var latRad = lat * Math.PI / 180; 			// convert degrees to radians
-  var lonRad = lon * Math.PI / 180; 			// convert degrees to radians
-
-  var a = 6377340.189, b = 6356034.447;     // Airy 1965 Datum major & minor semi-axes
-  var F0 = 1.000035;                        // NatGrid scale factor on central meridian
-  var lat0 = (53.5) * Math.PI / 180
-  var lon0 = (-8) * Math.PI / 180;  		// Irishh NG true origin
-  var N0 = 250000, E0 = 200000;             // northing & easting of true origin, metres
-
+  var latRad = lat * deg2rad; 			// convert degrees to radians
+  var lonRad = lon * deg2rad; 			// convert degrees to radians
 
   var e2 = 1 - (b*b)/(a*a);                      // eccentricity squared
   var n = (a-b)/(a+b), n2 = n*n, n3 = n*n*n;
@@ -134,7 +108,6 @@ var h = { WGS84toOSGB36: {
   var digits = 10;
   E = Math.floor((E%10000000)/Math.pow(10,5-digits/2));
   N = Math.floor((N%10000000)/Math.pow(10,5-digits/2));
-
 
   //Sdd leading zeros
   var es = E.toString();
