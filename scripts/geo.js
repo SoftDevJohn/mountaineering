@@ -16,8 +16,10 @@ function getGridFromLatLong(ukGrid,lat,lon){
   // -- convert polar to cartesian coordinates (using ellipse 1)
 	
   var deg2rad = Math.PI / 180;
+  
   var latRad = lat * deg2rad; // convert degrees to radians
   var lonRad = lon * deg2rad; // convert degrees to radians
+
   var a = 6378137; //WGS84.a
   var b = 6356752.3142;	//WGS84.b
   var tx = -482.53;
@@ -26,11 +28,13 @@ function getGridFromLatLong(ukGrid,lat,lon){
   var rx = 1.042/3600 * deg2rad;  // normalise seconds to radians
   var ry = 0.214/3600 * deg2rad;
   var rz = 0.631/3600 * deg2rad;
-  var s1 = -8.15/1e6 + 1;              // normalise ppm to (s+1)
-  var F0 = 1.000035;                        // NatGrid scale factor on central meridian
-  var lat0 = (53.5) * deg2rad
-  var lon0 = (-8) * deg2rad;  		// Irishh NG true origin
-  var N0 = 250000, E0 = 200000;             // northing & easting of true origin, metres
+//  var s1 = -8.15/1e6 + 1;              // normalise ppm to (s+1)
+  var s1 = -8.15/1000000 + 1;              // normalise ppm to (s+1)
+
+  var F0 = 1.000035;        
+  var lat0 = (53.5) * deg2rad;		
+  var lon0 = (-8) * deg2rad;
+  var N0 = 250000, E0 = 200000; 
   
   var sinPhi = Math.sin(latRad), cosPhi = Math.cos(latRad);
   var sinLambda = Math.sin(lonRad), cosLambda = Math.cos(lonRad);
@@ -54,8 +58,13 @@ function getGridFromLatLong(ukGrid,lat,lon){
   var precision = 4 / a;  // results accurate to around 4 metres
  
   eSq = (a*a - b*b) / (a*a);
+  
+  
   var p = Math.sqrt(x2*x2 + y2*y2);
   var phi = Math.atan2(z2, p*(1-eSq)), phiP = 2*Math.PI;
+  
+  
+  
   while (Math.abs(phi-phiP) > precision) {
     nu = a / Math.sqrt(1 - eSq*Math.sin(phi)*Math.sin(phi));
     phiP = phi;
@@ -64,28 +73,32 @@ function getGridFromLatLong(ukGrid,lat,lon){
   var lambda = Math.atan2(y2, x2);
   H = p/Math.cos(phi) - nu;
  
-  //return new LatLon(phi * 180 / Math.PI, lambda * 180 / Math.PI);
 	lat = phi * 180 / Math.PI;
 	lon = lambda * 180 / Math.PI;
 
-  ///////////////// mergin latLonToOsGrid
-  var latRad = lat * deg2rad; 			// convert degrees to radians
-  var lonRad = lon * deg2rad; 			// convert degrees to radians
+	/////SUUNTO TO HERE
 
-  var e2 = 1 - (b*b)/(a*a);                      // eccentricity squared
+  ///////////////// mergin latLonToOsGrid
+  latRad = lat * deg2rad; 			
+  lonRad = lon * deg2rad; 			
+
   var n = (a-b)/(a+b), n2 = n*n, n3 = n*n*n;
 
   var cosLat = Math.cos(latRad), sinLat = Math.sin(latRad);
-  var nu = a*F0/Math.sqrt(1-e2*sinLat*sinLat);              // transverse radius of curvature
-  var rho = a*F0*(1-e2)/Math.pow(1-e2*sinLat*sinLat, 1.5);  // meridional radius of curvature
+  nu = a*F0/Math.sqrt(1-eSq*sinLat*sinLat);              
+  var rho = a*F0*(1-eSq)/Math.pow(1-eSq*sinLat*sinLat, 1.5);  
   var eta2 = nu/rho-1;
 
   var Ma = (1 + n + (5/4)*n2 + (5/4)*n3) * (latRad-lat0);
   var Mb = (3*n + 3*n*n + (21/8)*n3) * Math.sin(latRad-lat0) * Math.cos(latRad+lat0);
   var Mc = ((15/8)*n2 + (15/8)*n3) * Math.sin(2*(latRad-lat0)) * Math.cos(2*(latRad+lat0));
   var Md = (35/24)*n3 * Math.sin(3*(latRad-lat0)) * Math.cos(3*(latRad+lat0));
-  var M = b * F0 * (Ma - Mb + Mc - Md);              // meridional arc
+  var M = b * F0 * (Ma - Mb + Mc - Md);              
 
+   alert("n is: "+lonRad);
+
+ 
+  
   var cos3lat = cosLat*cosLat*cosLat;
   var cos5lat = cos3lat*cosLat*cosLat;
   var tan2lat = Math.tan(latRad)*Math.tan(latRad);
@@ -99,6 +112,7 @@ function getGridFromLatLong(ukGrid,lat,lon){
   var V = (nu/6)*cos3lat*(nu/rho-tan2lat);
   var VI = (nu/120) * cos5lat * (5 - 18*tan2lat + tan4lat + 14*eta2 - 58*tan2lat*eta2);
 
+
   var dLon = lonRad-lon0;
   var dLon2 = dLon*dLon, dLon3 = dLon2*dLon, dLon4 = dLon3*dLon, dLon5 = dLon4*dLon, dLon6 = dLon5*dLon;
 
@@ -109,7 +123,7 @@ function getGridFromLatLong(ukGrid,lat,lon){
   E = Math.floor((E%10000000)/Math.pow(10,5-digits/2));
   N = Math.floor((N%10000000)/Math.pow(10,5-digits/2));
 
-  //Sdd leading zeros
+  
   var es = E.toString();
   for (var i=0; i<(digits/2)-es.length; i++) es = '0' + es;
 
