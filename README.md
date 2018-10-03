@@ -57,11 +57,11 @@ The expected `Irish Grid Reference`  is: `303207191773`*(according to ViewRanger
 
 Enter the coordinates for Croaghgorm as follows: 
 
-`Latitude: 54.75419` 
+`Latitude: 54.75408` 
 
-`Longitude:  -8.08101`
+`Longitude:  -8.081118`
 
 Press the "`Calculate Grid Reference`" button
 
-The expected `Irish Grid Reference`  is:  `303207191773` (according to ViewRanger)
+The expected `Irish Grid Reference`  is:  `194821389573` (according to ViewRanger)
 
